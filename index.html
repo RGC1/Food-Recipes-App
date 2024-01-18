@@ -21,17 +21,22 @@ integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJ
 
     <section class="btn d-grid gap-2 d-md-block">
 
-        <input class="btn btn-primary" type="button" value="Ingredients">
+        <form id="search-form" class="form">
+            <input class="form-control" type="text" id="userData" name="userData" value="Ingredients" required>
+        </form>
+
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Allergies
         </button>
         </div>
+
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             How to prepare
         </button>
         </div>
+
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             Type of food
@@ -41,6 +46,7 @@ integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJ
         <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
             Search
         </button>
+        
 
     </section>
 
