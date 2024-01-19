@@ -1,9 +1,9 @@
+let userInputIngredients = $("#userData").val().trim();
 function getInfo() {
 
   $("#search-form").on("submit", function (e) {
     e.preventDefault();
 
-    let userInputIngredients = $("#userData").val().trim();
 
     //APi for the food search conform the ingredients 
     //!Test the input!
@@ -27,11 +27,13 @@ function getInfo() {
   });
 }
 
-
 //API for the food Nutrition
 // !Test the input
 const input = $('.ingredients').val()
 const foodSearch = $('input')
+
+const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
+const apiIdNutrition = '3b7c2557';
 
 const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${foodSearch}`;
 
@@ -45,14 +47,9 @@ fetch(queryUrl)
     const file = $('.container')
     searchBtn.on('click', function (e) {
       e.preventDefault();
-      // const alergy = `${data.healthLabels}`
-      const print = $('<div>')
 
       const nutrition = `${data.ingredients}`
-      console.log(nutrition)
-      print.append(nutrition)localStorage
-      // print.append(alergy)
-      file.append(print)
+
     });
   })
 
