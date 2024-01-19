@@ -2,21 +2,12 @@
 let userIngredientsSearch = [];
 
 
-function getInfo() {
-
-  $("#search-form").on("submit", function (e) {
-    e.preventDefault();
-
-    let userInputIngredients = $("#userData").val().trim();
+function getInfo(ingredient) {
 
     //APi for the food search conform the ingredients 
-    //!Test the input!
-    
-    const apiKeySearch = "129bd2c702ab43ebbdcd90c506ff5b5c";
+    const apiKeySearch = "2577d71950714c1ba832e6d94daa3f21";
 
-    // const queryUrlSearch = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${userInputIngredients}&number=4&apiKey=${apiKeySearch}`;
-
-    const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${userInputIngredients}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
+    const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
     fetch(queryUrlSearch)
       .then(function (response) {
@@ -25,15 +16,26 @@ function getInfo() {
       .then(function (data) {
         console.log(data);
 
-        renderButton(userInputIngredients)
+        renderButton(ingredient)
 
         recipesCards(data)
 
         $(`#userData-input`).val(``);
 
       });
-  });
 }
+
+function userInput() {
+  $("#search-form").on("submit", function (e) {
+    e.preventDefault();
+
+    let userInputIngredients = $("#userData").val().trim();
+
+    getInfo(userInputIngredients)
+  })
+}
+
+userInput()
 
 
 // This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the renderButton function).
@@ -91,12 +93,12 @@ function renderButton(userInputIngredients) {
   function recipesCards(data) {
     $(`.food-options`).empty()
     for (let i = 0; i < data.results.length; i++) {
-      const divCard = $(`<div class = card>`);
-      const divCardBody = $(`<div class=card-body>`);
+      const divCard = $(`<div class = "card">`);
+      const divCardBody = $(`<div class= "card-body">`);
       const recipeTitle = $(`<h5>`).text(data.results[i].title);
-      const recipeImg = $(`<img class = imgRecipe>`).attr(`src`, data.results[i].image);
-      const recipeTime = $(`<p class = readyInMinutes>`).text(`Ready in ${data.results[i].readyInMinutes} min`)
-      const recipeServing = $(`<p class = serving>`).text(`Serving: ${data.results[i].servings}`)
+      const recipeImg = $(`<img class = "imgRecipe">`).attr(`src`, data.results[i].image);
+      const recipeTime = $(`<p class = "readyInMinutes">`).text(`Ready in ${data.results[i].readyInMinutes} min`)
+      const recipeServing = $(`<p class = "serving">`).text(`Serving: ${data.results[i].servings}`)
   
       const dietsDiv = $(`<div class = "dietsInfo">`)
       const dietsTitle = $(`<h6>`).text(`Diets:`)
@@ -120,7 +122,7 @@ function renderButton(userInputIngredients) {
   
       $(`.food-options`).append(divCard);
       divCard.append(divCardBody);
-      divCardBody.append(recipeTitle, recipeImg, recipeTime,recipeServing, dietsDiv, ingredientsDiv)
+      divCardBody.append(recipeTitle, recipeImg, recipeTime, recipeServing, dietsDiv, ingredientsDiv)
       // we could add cusines and link to external URL
     }
   }
