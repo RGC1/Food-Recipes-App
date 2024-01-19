@@ -28,36 +28,33 @@ function getInfo() {
 }
 
 
+//API for the food Nutrition
+// !Test the input
+const input = $('.ingredients').val()
+const foodSearch = $('input')
 
-// //API for the food Nutrition
-// // !Test the input
-// const input = $('.ingredients').val()
-// const foodSearch = $('input')
+const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${foodSearch}`;
 
-// const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${foodSearch}`;
+fetch(queryUrl)
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data) {
+    console.log(data);
 
-// fetch(queryUrl)
-//   .then(function (response) {
-//     return response.json();
-//   })
-//   .then(function (data) {
-//     console.log(data);
+    const file = $('.container')
+    searchBtn.on('click', function (e) {
+      e.preventDefault();
+      // const alergy = `${data.healthLabels}`
+      const print = $('<div>')
 
-//     const file = $('.container')
-//     searchBtn.on('click', function (e) {
-//       e.preventDefault();
-//       // const alergy = `${data.healthLabels}`
-//       const print = $('<div>')
-
-//       const nutrition = `${data.ingredients}`
-//       console.log(nutrition)
-//       print.append(nutrition)
-//       // print.append(alergy)
-//       file.append(print)
-//     });
-//   })
-
-
+      const nutrition = `${data.ingredients}`
+      console.log(nutrition)
+      print.append(nutrition)localStorage
+      // print.append(alergy)
+      file.append(print)
+    });
+  })
 
 
   function recipesCards(data) {
