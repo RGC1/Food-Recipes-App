@@ -7,6 +7,7 @@ function getInfo() {
 
     //APi for the food search conform the ingredients 
     //!Test the input!
+    
     const apiKeySearch = "129bd2c702ab43ebbdcd90c506ff5b5c";
 
     // const queryUrlSearch = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${userInputIngredients}&number=4&apiKey=${apiKeySearch}`;
@@ -25,8 +26,6 @@ function getInfo() {
       });
   });
 }
-
-
 
 
 
