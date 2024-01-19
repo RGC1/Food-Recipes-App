@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 let userInputIngredients = $("#userData").val().trim();
+=======
+// Empty array of previous searches, needed for buttons and localstorage
+let userIngredientsSearch = [];
+
+
+>>>>>>> f2c73accc96cc4a728297e4b230b2bb05ea5612c
 function getInfo() {
 
   $("#search-form").on("submit", function (e) {
@@ -21,7 +28,11 @@ function getInfo() {
       .then(function (data) {
         console.log(data);
 
+        renderButton(userInputIngredients)
+
         recipesCards(data)
+
+        $(`#userData-input`).val(``);
 
       });
   });
@@ -32,8 +43,33 @@ function getInfo() {
 const input = $('.ingredients').val()
 const foodSearch = $('input')
 
+<<<<<<< HEAD
 const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
 const apiIdNutrition = '3b7c2557';
+=======
+// This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the renderButton function).
+function capitalizeWords(inputString) {
+  return inputString.replace(/\b\w/g, function(char) {
+    return char.toUpperCase();
+  });
+}
+
+
+// This function creates buttons for each user search and it checks if the button with the same ingredient already exist, if not it will append it to the aside section.
+function renderButton(userInputIngredients) {
+  // If the user inputs any ingredient with capital letter the method will tranform every letter to lowercase.
+  if (/[A-Z]/.test(userInputIngredients)) {
+    userInputIngredients = userInputIngredients.toLowerCase();
+  }
+  const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
+  if (!userIngredientsSearch.includes(capitalizedUserInputIngredients)){
+    const createButton = $("<button class = `buttonSearch`>").text(`${capitalizedUserInputIngredients}`);
+    $(`.history`).append(createButton);
+    userIngredientsSearch.push(capitalizedUserInputIngredients)
+  }
+}
+
+>>>>>>> f2c73accc96cc4a728297e4b230b2bb05ea5612c
 
 const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${foodSearch}`;
 
@@ -50,10 +86,13 @@ fetch(queryUrl)
 
       const nutrition = `${data.ingredients}`
 
+<<<<<<< HEAD
     });
   })
 
 
+=======
+>>>>>>> f2c73accc96cc4a728297e4b230b2bb05ea5612c
   function recipesCards(data) {
     $(`.food-options`).empty()
     for (let i = 0; i < data.results.length; i++) {
