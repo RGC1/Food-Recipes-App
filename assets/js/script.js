@@ -5,7 +5,7 @@ let userIngredientsSearch = [];
 function getInfo(ingredient) {
 
   //APi for the food search conform the ingredients 
-  const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
+  const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
 
   const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
@@ -41,7 +41,7 @@ function userInput() {
       userInputIngredients = userInputIngredients.toLowerCase();
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
-    
+
     getInfo(capitalizedUserInputIngredients);
     // Clearing the search input field from previous search.
     $("#userData").val("");
@@ -125,35 +125,47 @@ function recipesCards(data) {
   $(`.food-options`).empty()
   for (let i = 0; i < data.results.length; i++) {
     const divCard = $(`<div class = card>`);
-    const divCardBody = $(`<div class= card-body>`);
+    const divCardBody = $(`<div class=card-body>`);
     const recipeTitle = $(`<h5>`).text(data.results[i].title);
     const recipeImg = $(`<img class = imgRecipe>`).attr(`src`, data.results[i].image);
-    const recipeTime = $(`<p class = readyInMinutes>`).text(`Ready in ${data.results[i].readyInMinutes} min`);
-    const recipeServing = $(`<p class = serving>`).text(`Serving: ${data.results[i].servings}`);
+    const recipeTime = $(`<p class = readyInMinutes>`).text(`Ready in ${data.results[i].readyInMinutes} min`)
+    const recipeServingTitle = $(`<h6 class = servingTitle>`).text(`Serving:`)
+    const recipeServing = $(`<p class = serving>`).text(`${data.results[i].servings}`)
 
-    const dietsDiv = $(`<div class = dietsInfo>`);
-    const dietsTitle = $(`<h6>`).text(`Diets:`);
+    const dietsDiv = $(`<div class = "dietsInfo">`)
+    const dietsTitle = $(`<h6>`).text(`Diets:`)
     let dietsString = "";
     for (let j = 0; j < data.results[i].diets.length; j++) {
       const recipeDiets = data.results[i].diets[j];
-      dietsString += recipeDiets + `, `
+      const capitalizedDiets = recipeDiets.charAt(0).toUpperCase() + recipeDiets.slice(1).toLowerCase();
+      dietsString += capitalizedDiets + `, `
     }
     dietsString = dietsString.slice(0, -2);
-    dietsDiv.append(dietsTitle, ($(`<p>`).text(dietsString)));
+    dietsDiv.append(dietsTitle, ($(`<p>`).text(dietsString)))
 
-    const ingredientsDiv = $(`<div class = ingredientsInfo>`);
-    const ingredientsTitle = $(`<h6>`).text(`Ingredients:`);
-    let ingredientsString = "";
+    const ingredientsDiv = $(`<div class = ingredientsInfo>`)
+    const ingredientsTitle = $(`<h6>`).text(`Ingredients:`)
+    const ingredientsList = $(`<ul>`)
+    // let ingredientsString = "";
     for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
       const ingredientName = data.results[i].extendedIngredients[k].name;
-      ingredientsString += ingredientName + `, `
+
+      const capitalizedIngredient = ingredientName.charAt(0).toUpperCase() + ingredientName.slice(1).toLowerCase();
+      const listItemIngredient = $(`<li>`).text(capitalizedIngredient);
+      ingredientsList.append(listItemIngredient);
+      // ingredientsString += capitalizedIngredient + `, `
     }
-    ingredientsString = ingredientsString.slice(0, -2);
-    ingredientsDiv.append(ingredientsTitle, ($(`<p>`).text(ingredientsString)));
+    // ingredientsString = ingredientsString.slice(0, -2);
+    ingredientsDiv.append(ingredientsTitle, ingredientsList);
+
+
+    const linkDiv = $(`<div class = externalLink>`);
+    // Added target="_blank" to open the link in a new tab.
+    const recipeLink = $(`<a href=${data.results[i].sourceUrl} class=btn id=btnRecipe target="_blank">Go to Recipe</a>`);
+    linkDiv.append(recipeLink);
 
     $(`.food-options`).append(divCard);
     divCard.append(divCardBody);
-    divCardBody.append(recipeTitle, recipeImg, recipeTime, recipeServing, dietsDiv, ingredientsDiv);
-    // we could add cusines and link to external URL
+    divCardBody.append(recipeTitle, recipeImg, recipeTime, recipeServingTitle, recipeServing, dietsDiv, ingredientsDiv, linkDiv);
   }
 }
