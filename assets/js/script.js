@@ -5,7 +5,7 @@ let userIngredientsSearch = [];
 function getInfo(ingredient) {
 
     //APi for the food search conform the ingredients 
-    const apiKeySearch = "2577d71950714c1ba832e6d94daa3f21";
+    const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
 
     const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
@@ -54,11 +54,18 @@ function renderButton(userInputIngredients) {
   }
   const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
   if (!userIngredientsSearch.includes(capitalizedUserInputIngredients)){
-    const createButton = $("<button class = `buttonSearch`>").text(`${capitalizedUserInputIngredients}`);
+    const createButton = $("<button class = buttonSearch>").text(`${capitalizedUserInputIngredients}`);
     $(`.history`).append(createButton);
     userIngredientsSearch.push(capitalizedUserInputIngredients)
   }
 }
+
+// Event listener for click on buttonSearch, it will regenerate a search when clicking on the history buttons.
+$(document).on("click", ".buttonSearch", function (event) {
+  // console.log("Button clicked:", event.target.textContent)
+  getInfo(event.target.textContent)
+});
+
 
 
 //API for the food Nutrition
@@ -84,21 +91,21 @@ fetch(queryUrl)
   })
   .then(function (dataIngredients) {
     console.log(dataIngredients);
- });
-  }
+  });
+}
 
 
   function recipesCards(data) {
     $(`.food-options`).empty()
     for (let i = 0; i < data.results.length; i++) {
-      const divCard = $(`<div class = "card">`);
-      const divCardBody = $(`<div class= "card-body">`);
+      const divCard = $(`<div class = card>`);
+      const divCardBody = $(`<div class= card-body>`);
       const recipeTitle = $(`<h5>`).text(data.results[i].title);
-      const recipeImg = $(`<img class = "imgRecipe">`).attr(`src`, data.results[i].image);
-      const recipeTime = $(`<p class = "readyInMinutes">`).text(`Ready in ${data.results[i].readyInMinutes} min`)
-      const recipeServing = $(`<p class = "serving">`).text(`Serving: ${data.results[i].servings}`)
+      const recipeImg = $(`<img class = imgRecipe>`).attr(`src`, data.results[i].image);
+      const recipeTime = $(`<p class = readyInMinutes>`).text(`Ready in ${data.results[i].readyInMinutes} min`)
+      const recipeServing = $(`<p class = serving>`).text(`Serving: ${data.results[i].servings}`)
   
-      const dietsDiv = $(`<div class = "dietsInfo">`)
+      const dietsDiv = $(`<div class = dietsInfo>`)
       const dietsTitle = $(`<h6>`).text(`Diets:`)
       let dietsString = "";
       for (let j = 0; j < data.results[i].diets.length; j++) {
@@ -108,7 +115,7 @@ fetch(queryUrl)
       dietsString = dietsString.slice(0, -2);
       dietsDiv.append(dietsTitle, ($(`<p>`).text(dietsString)))
   
-      const ingredientsDiv = $(`<div class = "ingredientsInfo">`)
+      const ingredientsDiv = $(`<div class = ingredientsInfo>`)
       const ingredientsTitle = $(`<h6>`).text(`Ingredients:`)
       let ingredientsString = "";
       for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
@@ -124,5 +131,3 @@ fetch(queryUrl)
       // we could add cusines and link to external URL
     }
   }
-
-  getInfo()
