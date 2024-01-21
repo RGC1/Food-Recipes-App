@@ -17,34 +17,34 @@ function getInfo(ingredient) {
         console.log(data);
 
         renderButton(ingredient)
-
+      
         recipesCards(data)
-
+      
         $(`#userData-input`).val(``);
 
       });
 }
 
-function userInput() {
-  $("#search-form").on("submit", function (e) {
-    e.preventDefault();
-
-    let userInputIngredients = $("#userData").val().trim();
-
-    getInfo(userInputIngredients)
-  })
-}
-
-userInput()
-
-
-// This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the renderButton function).
-function capitalizeWords(inputString) {
-  return inputString.replace(/\b\w/g, function(char) {
-    return char.toUpperCase();
-  });
-}
-
+  function userInput() {
+    $("#search-form").on("submit", function (e) {
+      e.preventDefault();
+  
+      let userInputIngredients = $("#userData").val().trim();
+  
+      getInfo(userInputIngredients)
+    })
+  }
+  
+  userInput()
+  
+  
+  // This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the renderButton function).
+  function capitalizeWords(inputString) {
+    return inputString.replace(/\b\w/g, function(char) {
+      return char.toUpperCase();
+    });
+  }
+  
 
 // This function creates buttons for each user search and it checks if the button with the same ingredient already exist, if not it will append it to the aside section.
 function renderButton(userInputIngredients) {
@@ -61,33 +61,31 @@ function renderButton(userInputIngredients) {
 }
 
 
-// //API for the food Nutrition
-// // !Test the input
-// const input = $('.ingredients').val()
-// const foodSearch = $('input')
+//API for the food Nutrition
+// !Test the input
+function nutrition(){
 
-// const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${foodSearch}`;
+const ingredientsNutrition = `${data.ingredients}`
 
-// fetch(queryUrl)
-//   .then(function (response) {
-//     return response.json();
-//   })
-//   .then(function (data) {
-//     console.log(data);
+const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
+const apiIdNutrition = '3b7c2557';
 
-//     const file = $('.container')
-//     searchBtn.on('click', function (e) {
-//       e.preventDefault();
-//       // const alergy = `${data.healthLabels}`
-//       const print = $('<div>')
+// const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
+// const apiIdNutrition = 'c3a22b69';
 
-//       const nutrition = `${data.ingredients}`
-//       console.log(nutrition)
-//       print.append(nutrition)
-//       // print.append(alergy)
-//       file.append(print)
-//     });
-//   })
+// const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
+// const apiIdNutrition = '3b7c2557';
+
+const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${ingredientsNutrition}`;
+
+fetch(queryUrl)
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (dataIngredients) {
+    console.log(dataIngredients);
+ });
+  }
 
 
   function recipesCards(data) {
