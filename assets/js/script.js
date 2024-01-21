@@ -148,8 +148,8 @@ function recipesCards(data) {
     const ingredientsList = $(`<ul>`)
     // let ingredientsString = "";
     for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
-      const ingredientName = data.results[i].extendedIngredients[k].name;
-
+      const ingredientName = data.results[i].extendedIngredients[k].original;
+      // console.log(ingredientName)
       const capitalizedIngredient = ingredientName.charAt(0).toUpperCase() + ingredientName.slice(1).toLowerCase();
       const listItemIngredient = $(`<li>`).text(capitalizedIngredient);
       ingredientsList.append(listItemIngredient);
