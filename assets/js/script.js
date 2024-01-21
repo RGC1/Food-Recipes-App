@@ -36,16 +36,16 @@ function captureDropdownIntoleranceClick() {
     localStorage.setItem('userIntolerance', selectedValue);
   });
 }
-function captureDropdownDietClick() {
-  $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
-    var selectedValueDiet = $(this).text();
-    // Store the selected value in local storage with a specific key
-    localStorage.setItem('userDiet', selectedValueDiet);
-  });
-}
+// function captureDropdownDietClick() {
+//   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
+//     var selectedValueDiet = $(this).text();
+//     // Store the selected value in local storage with a specific key
+//     localStorage.setItem('userDiet', selectedValueDiet);
+//   });
+// }
 // Call the function
 captureDropdownIntoleranceClick()
-captureDropdownDietClick()
+// captureDropdownDietClick()
 
 function userInput() {
   $("#search-form").on("submit", function (e) {
