@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-let userInputIngredients = $("#userData").val().trim();
-=======
 // Empty array of previous searches, needed for buttons and localstorage
 let userIngredientsSearch = [];
 
