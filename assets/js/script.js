@@ -2,12 +2,13 @@
 let userIngredientsSearch = [];
 
 
-function getInfo(ingredient) {
+function getInfo(ingredient, selectedValueDiet, selectedValue) {
 
   //APi for the food search conform the ingredients 
-  const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
-
-  const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
+  // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
+  // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
+  const apiKeySearch = "53652a663c354e37a7039fec8ea241ae";
+  const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValue}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
   fetch(queryUrlSearch)
     .then(function (response) {
@@ -46,6 +47,25 @@ function captureDropdownIntoleranceClick() {
 // Call the function
 captureDropdownIntoleranceClick()
 // captureDropdownDietClick()
+function captureDropdownIntoleranceClick() {
+  $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
+    var selectedValue = $(this).text();
+    // Store the selected value in local storage with a specific key
+    localStorage.setItem('userIntolerance', selectedValue);
+    getInfo(selectedValue)
+  });
+}
+function captureDropdownDietClick() {
+  $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
+    var selectedValueDiet = $(this).text();
+    // Store the selected value in local storage with a specific key
+    localStorage.setItem('userDiet', selectedValueDiet);
+    getInfo(selectedValueDiet)
+  });
+}
+// Call the function
+captureDropdownIntoleranceClick()
+captureDropdownDietClick()
 
 function userInput() {
   $("#search-form").on("submit", function (e) {
