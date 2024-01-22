@@ -1,9 +1,7 @@
 // Empty array of previous searches, needed for buttons and localstorage
 let userIngredientsSearch = [];
 
-
 function getInfo(ingredient, selectedValueDiet, selectedValue) {
-
   //APi for the food search conform the ingredients 
   // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
@@ -15,8 +13,6 @@ function getInfo(ingredient, selectedValueDiet, selectedValue) {
       return response.json();
     })
     .then(function (data) {
-      // console.log(data);
-
       // The if statement checks if the user already searched an ingredient with the same name (in the userIngredientSearch array) if not it will push the new ingredient to the array and generate a new button and save it to local storage.
       if (!userIngredientsSearch.includes(ingredient)) {
         userIngredientsSearch.push(ingredient);
@@ -30,23 +26,30 @@ function getInfo(ingredient, selectedValueDiet, selectedValue) {
       $(`#userData-input`).val(``);
     });
 }
-function captureDropdownIntoleranceClick() {
-  $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
-    var selectedValue = $(this).text();
-    // Store the selected value in local storage with a specific key
-    localStorage.setItem('userIntolerance', selectedValue);
-  });
+//API for the food Nutrition
+// !Test the input
+function nutrition(capitalizedUserInputIngredients) {
+  if (!capitalizedUserInputIngredients) {
+    // Handle empty input or show an error message
+    console.error("Please enter valid ingredients");
+    return;
+  }
+
+  const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
+  const apiIdNutrition = 'c3a22b69';
+
+  const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${capitalizedUserInputIngredients}`;
+
+  fetch(queryUrl)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data.totalNutrientsKCal);
+      // Use the data as needed, e.g., display on the webpage
+    })
 }
-// function captureDropdownDietClick() {
-//   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
-//     var selectedValueDiet = $(this).text();
-//     // Store the selected value in local storage with a specific key
-//     localStorage.setItem('userDiet', selectedValueDiet);
-//   });
-// }
-// Call the function
-captureDropdownIntoleranceClick()
-// captureDropdownDietClick()
+
 function captureDropdownIntoleranceClick() {
   $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
     var selectedValue = $(this).text();
@@ -72,14 +75,15 @@ function userInput() {
     e.preventDefault();
 
     let userInputIngredients = $("#userData").val().trim();
-
+    console.log('test')
     // If the user inputs any ingredient with capital letter the method will tranform every letter to lowercase.
     if (/[A-Z]/.test(userInputIngredients)) {
       userInputIngredients = userInputIngredients.toLowerCase();
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
-
+   console.log(capitalizedUserInputIngredients)
     getInfo(capitalizedUserInputIngredients);
+    nutrition(capitalizedUserInputIngredients)
     // Clearing the search input field from previous search.
     $("#userData").val("");
   });
@@ -87,14 +91,12 @@ function userInput() {
 
 userInput();
 
-
 // This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the userInput function).
 function capitalizeWords(inputString) {
   return inputString.replace(/\b\w/g, function (char) {
     return char.toUpperCase();
   });
 }
-
 
 // This function creates buttons for each user search and it appends them to the aside section.
 function renderButton(capitalizedUserInputIngredients) {
@@ -107,6 +109,7 @@ function renderButton(capitalizedUserInputIngredients) {
 $(document).on("click", ".buttonSearch", function (event) {
   // console.log("Button clicked:", event.target.textContent)
   getInfo(event.target.textContent)
+  // nutrition(event.target.textContent)
 });
 
 
@@ -128,35 +131,6 @@ function loadFromLocalStorage() {
   }
 }
 loadFromLocalStorage();
-
-
-
-//API for the food Nutrition
-// !Test the input
-function nutrition() {
-
-  const ingredientsNutrition = `${data.ingredients}`
-
-  const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
-  const apiIdNutrition = '3b7c2557';
-
-  // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
-  // const apiIdNutrition = 'c3a22b69';
-
-  // const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
-  // const apiIdNutrition = '3b7c2557';
-
-  const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${ingredientsNutrition}`;
-
-  fetch(queryUrl)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (dataIngredients) {
-      console.log(dataIngredients);
-    });
-}
-
 
 function recipesCards(data) {
   $(`.food-options`).empty()
