@@ -81,7 +81,7 @@ function userInput() {
       userInputIngredients = userInputIngredients.toLowerCase();
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
-   console.log(capitalizedUserInputIngredients)
+    console.log(capitalizedUserInputIngredients)
     getInfo(capitalizedUserInputIngredients);
     nutrition(capitalizedUserInputIngredients)
     // Clearing the search input field from previous search.
