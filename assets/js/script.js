@@ -91,21 +91,25 @@ function userInput() {
     getInfo(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet);
     nutrition(capitalizedUserInputIngredients)
     
+    // Clear active state of dropdown items
+    $('.btn-group.intolerance-dropdown .dropdown-item').removeClass('active');
+    $('.btn-group.diet-dropdown .dropdown-item').removeClass('active');
+
     // Clearing the search input field from previous search.
     $("#userData").val("");
   });
-
+  
   // Event listener for click on dropdown items (intolerance)
   $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
     // Toggle active class for styling if needed
-    $('.btn-group.intolerance-dropdown .dropdown-item').removeClass('active');
+    $('.btn-group.intolerance-dropdown .dropdown-item');
     $(this).addClass('active');
   });
 
   // Event listener for click on dropdown items (diet)
   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
     // Toggle active class for styling if needed
-    $('.btn-group.diet-dropdown .dropdown-item').removeClass('active');
+    $('.btn-group.diet-dropdown .dropdown-item');
     $(this).addClass('active');
   });
 }
