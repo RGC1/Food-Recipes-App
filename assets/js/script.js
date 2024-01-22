@@ -1,12 +1,12 @@
 // Empty array of previous searches, needed for buttons and localstorage
 let userIngredientsSearch = [];
 
-function getInfo(ingredient, selectedValueDiet, selectedValue) {
+function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
   //APi for the food search conform the ingredients 
   // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  const apiKeySearch = "53652a663c354e37a7039fec8ea241ae";
-  const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValue}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
+  const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
+  const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
   fetch(queryUrlSearch)
     .then(function (response) {
@@ -26,6 +26,8 @@ function getInfo(ingredient, selectedValueDiet, selectedValue) {
       $(`#userData-input`).val(``);
     });
 }
+
+
 //API for the food Nutrition
 // !Test the input
 function nutrition(capitalizedUserInputIngredients) {
@@ -50,42 +52,65 @@ function nutrition(capitalizedUserInputIngredients) {
     })
 }
 
-function captureDropdownIntoleranceClick() {
-  $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
-    var selectedValue = $(this).text();
-    // Store the selected value in local storage with a specific key
-    localStorage.setItem('userIntolerance', selectedValue);
-    getInfo(selectedValue)
-  });
-}
-function captureDropdownDietClick() {
-  $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
-    var selectedValueDiet = $(this).text();
-    // Store the selected value in local storage with a specific key
-    localStorage.setItem('userDiet', selectedValueDiet);
-    getInfo(selectedValueDiet)
-  });
-}
+// function captureDropdownIntoleranceClick() {
+//   $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
+//     var selectedValueIntolerance = $(this).text();
+//     // Store the selected value in local storage with a specific key
+//     localStorage.setItem('userIntolerance', selectedValueIntolerance);
+//     getInfo(selectedValueIntolerance)
+//   });
+// }
+// function captureDropdownDietClick() {
+//   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
+//     var selectedValueDiet = $(this).text();
+//     // Store the selected value in local storage with a specific key
+//     localStorage.setItem('userDiet', selectedValueDiet);
+//     getInfo(selectedValueDiet)
+//   });
+// }
 // Call the function
-captureDropdownIntoleranceClick()
-captureDropdownDietClick()
+// captureDropdownIntoleranceClick()
+// captureDropdownDietClick()
 
 function userInput() {
   $("#search-form").on("submit", function (e) {
     e.preventDefault();
 
     let userInputIngredients = $("#userData").val().trim();
-    console.log('test')
+    // console.log('test')
     // If the user inputs any ingredient with capital letter the method will tranform every letter to lowercase.
     if (/[A-Z]/.test(userInputIngredients)) {
       userInputIngredients = userInputIngredients.toLowerCase();
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
-   console.log(capitalizedUserInputIngredients)
-    getInfo(capitalizedUserInputIngredients);
+    console.log(capitalizedUserInputIngredients)
+
+    const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
+    const selectedValueIntolerance = $('.btn-group.intolerance-dropdown .dropdown-item.active').text();
+
+    getInfo(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet);
     nutrition(capitalizedUserInputIngredients)
+    
+    // Clear active state of dropdown items
+    $('.btn-group.intolerance-dropdown .dropdown-item').removeClass('active');
+    $('.btn-group.diet-dropdown .dropdown-item').removeClass('active');
+
     // Clearing the search input field from previous search.
     $("#userData").val("");
+  });
+  
+  // Event listener for click on dropdown items (intolerance)
+  $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
+    // Toggle active class for styling if needed
+    $('.btn-group.intolerance-dropdown .dropdown-item');
+    $(this).addClass('active');
+  });
+
+  // Event listener for click on dropdown items (diet)
+  $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
+    // Toggle active class for styling if needed
+    $('.btn-group.diet-dropdown .dropdown-item');
+    $(this).addClass('active');
   });
 }
 
