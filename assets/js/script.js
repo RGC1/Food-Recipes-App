@@ -5,7 +5,8 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
   //APi for the food search conform the ingredients 
   // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
+  // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
+  const apiKeySearch = 'e74daa4c1fba4dea89c7a0c637bd6d4d'
   const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
   fetch(queryUrlSearch)
@@ -29,48 +30,35 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
 
 
 //API for the food Nutrition
-// !Test the input
-function nutrition(capitalizedUserInputIngredients) {
-  if (!capitalizedUserInputIngredients) {
+function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
+  if (!ingredientName) {
     // Handle empty input or show an error message
     console.error("Please enter valid ingredients");
     return;
   }
 
-  const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
-  const apiIdNutrition = 'c3a22b69';
+  // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
+  // const apiIdNutrition = 'c3a22b69';
 
-  const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${capitalizedUserInputIngredients}`;
+  const apiKeyNutrition = 'b4aa5d362758efabc2eca7ebeec76e28';
+  const apiIdNutrition = 'acf79b7b';
+
+  // const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
+  // const apiIdNutrition = '3b7c2557';
+
+  const queryUrl = `https://api.edamam.com/api/nutrition-data?app_id=${apiIdNutrition}&app_key=${apiKeyNutrition}&nutrition-type=cooking&ingr=${ingredientName}`;
 
   fetch(queryUrl)
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      console.log(data.totalNutrientsKCal);
-      // Use the data as needed, e.g., display on the webpage
-    })
-}
+    .then(function (dataNutrition) {
+      const nutrition = dataNutrition.calories 
 
-// function captureDropdownIntoleranceClick() {
-//   $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
-//     var selectedValueIntolerance = $(this).text();
-//     // Store the selected value in local storage with a specific key
-//     localStorage.setItem('userIntolerance', selectedValueIntolerance);
-//     getInfo(selectedValueIntolerance)
-//   });
-// }
-// function captureDropdownDietClick() {
-//   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
-//     var selectedValueDiet = $(this).text();
-//     // Store the selected value in local storage with a specific key
-//     localStorage.setItem('userDiet', selectedValueDiet);
-//     getInfo(selectedValueDiet)
-//   });
-// }
-// Call the function
-// captureDropdownIntoleranceClick()
-// captureDropdownDietClick()
+      listItemIngredient.text(capitalizedIngredient + ": " + nutrition + "Kcal");
+      
+    })}
+
 
 function userInput() {
   $("#search-form").on("submit", function (e) {
@@ -83,13 +71,12 @@ function userInput() {
       userInputIngredients = userInputIngredients.toLowerCase();
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
-    console.log(capitalizedUserInputIngredients)
 
     const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
     const selectedValueIntolerance = $('.btn-group.intolerance-dropdown .dropdown-item.active').text();
 
     getInfo(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet);
-    nutrition(capitalizedUserInputIngredients)
+  
     
     // Clear active state of dropdown items
     $('.btn-group.intolerance-dropdown .dropdown-item').removeClass('active');
@@ -182,24 +169,24 @@ function recipesCards(data) {
     const ingredientsDiv = $(`<div class = ingredientsInfo>`)
     const ingredientsTitle = $(`<h6>`).text(`Ingredients:`)
     const ingredientsList = $(`<ul>`)
+
     // let ingredientsString = "";
     for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
       const ingredientName = data.results[i].extendedIngredients[k].original;
-      // console.log(ingredientName)
       const capitalizedIngredient = ingredientName.charAt(0).toUpperCase() + ingredientName.slice(1).toLowerCase();
       const listItemIngredient = $(`<li>`).text(capitalizedIngredient);
       ingredientsList.append(listItemIngredient);
       // ingredientsString += capitalizedIngredient + `, `
+     nutrition(ingredientName, capitalizedIngredient, listItemIngredient)
     }
     // ingredientsString = ingredientsString.slice(0, -2);
     ingredientsDiv.append(ingredientsTitle, ingredientsList);
-
 
     const linkDiv = $(`<div class = externalLink>`);
     // Added target="_blank" to open the link in a new tab.
     const recipeLink = $(`<a href=${data.results[i].sourceUrl} class=btn id=btnRecipe target="_blank">Go to Recipe</a>`);
     linkDiv.append(recipeLink);
-
+   
     $(`.food-options`).append(divCard);
     divCard.append(divCardBody);
     divCardBody.append(recipeTitle, recipeImg, recipeTime, recipeServingTitle, recipeServing, dietsDiv, ingredientsDiv, linkDiv);
