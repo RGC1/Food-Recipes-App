@@ -12,7 +12,7 @@ body {
 
 .first-page{
   height: 100vh;
-  background-image:url('../images/Design2.jpeg');
+  background-image:url('../images/Design1.jpeg');
   background-position: 0 0 100%;
   background-size: auto, cover;
   flex-direction: column;
