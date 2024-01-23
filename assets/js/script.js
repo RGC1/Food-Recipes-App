@@ -1,12 +1,12 @@
-// Empty array of previous searches, needed for buttons and localstorage
+// Empty array of previous searches, needed for localstorage
 let userIngredientsSearch = [];
 
 function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
   //APi for the food search conform the ingredients 
   // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  const apiKeySearch = 'e74daa4c1fba4dea89c7a0c637bd6d4d'
+  // const apiKeySearch = "e74daa4c1fba4dea89c7a0c637bd6d4d";
+  const apiKeySearch = '20fa1c17de69490f93632c908260c7bb'
   const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
   fetch(queryUrlSearch)
@@ -14,12 +14,20 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
       return response.json();
     })
     .then(function (data) {
-      // The if statement checks if the user already searched an ingredient with the same name (in the userIngredientSearch array) if not it will push the new ingredient to the array and generate a new button and save it to local storage.
-      if (!userIngredientsSearch.includes(ingredient)) {
-        userIngredientsSearch.push(ingredient);
-        renderButton(ingredient);
-        saveToLocalStorage();
+      // console.log(data)
+
+      // Retriving the stored `ingredientSearch` from localStorage, thanks to `findIndex method` checks if in the recipesList array there is an item which matches the specified conditions and if so returns the index of the first element in the array that satisfies the provided testing function. If no element satisfies the condition, it returns -1.
+      const recipesList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+      const existingRecipesList = recipesList.findIndex(function (item) {
+        return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance
+      });
+      
+      // If the existingRecipesList returned -1, so no object is stored with the same parameters, it will render a new button and it will save the new search to localStorage.
+      if (existingRecipesList === -1) {
+        renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
+        saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet);
       }
+
       // Calling the function to generate recipes cards.
       recipesCards(data);
 
@@ -40,8 +48,8 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
   // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
   // const apiIdNutrition = 'c3a22b69';
 
-  const apiKeyNutrition = 'b4aa5d362758efabc2eca7ebeec76e28';
-  const apiIdNutrition = 'acf79b7b';
+  const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
+  const apiIdNutrition = 'c3a22b69';
 
   // const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
   // const apiIdNutrition = '3b7c2557';
@@ -53,11 +61,11 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
       return response.json();
     })
     .then(function (dataNutrition) {
-      const nutrition = dataNutrition.calories 
+      const nutrition = dataNutrition.calories
 
-      listItemIngredient.text(capitalizedIngredient + ": " + nutrition + "Kcal");
-      
-    })}
+      listItemIngredient.text(capitalizedIngredient + " - " + nutrition + " Kcal");
+    })
+}
 
 
 function userInput() {
@@ -65,19 +73,18 @@ function userInput() {
     e.preventDefault();
 
     let userInputIngredients = $("#userData").val().trim();
-    // console.log('test')
+    
     // If the user inputs any ingredient with capital letter the method will tranform every letter to lowercase.
     if (/[A-Z]/.test(userInputIngredients)) {
       userInputIngredients = userInputIngredients.toLowerCase();
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
 
-    const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
     const selectedValueIntolerance = $('.btn-group.intolerance-dropdown .dropdown-item.active').text();
+    const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
 
     getInfo(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet);
-  
-    
+
     // Clear active state of dropdown items
     $('.btn-group.intolerance-dropdown .dropdown-item').removeClass('active');
     $('.btn-group.diet-dropdown .dropdown-item').removeClass('active');
@@ -85,14 +92,13 @@ function userInput() {
     // Clearing the search input field from previous search.
     $("#userData").val("");
   });
-  
+
   // Event listener for click on dropdown items (intolerance)
   $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
     // Toggle active class for styling if needed
     $('.btn-group.intolerance-dropdown .dropdown-item');
     $(this).addClass('active');
   });
-
   // Event listener for click on dropdown items (diet)
   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
     // Toggle active class for styling if needed
@@ -101,7 +107,9 @@ function userInput() {
   });
 }
 
+
 userInput();
+
 
 // This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the userInput function).
 function capitalizeWords(inputString) {
@@ -110,39 +118,61 @@ function capitalizeWords(inputString) {
   });
 }
 
+
 // This function creates buttons for each user search and it appends them to the aside section.
-function renderButton(capitalizedUserInputIngredients) {
-  const createButton = $("<button class = buttonSearch>").text(`${capitalizedUserInputIngredients}`);
-  $(`.history`).append(createButton);
+function renderButton(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet) {
+  const createButton = $("<button class='buttonSearch'>")
+    .text(`${capitalizedUserInputIngredients} - Intolerance: ${selectedValueIntolerance || 'None'} - Diet: ${selectedValueDiet || 'None'}`);
+
+  // Creating data attribute for each buttons so we can use them to make a new search when the user click on the buttons.
+  createButton.attr(`data-ingredient`, capitalizedUserInputIngredients);
+  createButton.attr(`data-intolerance`, selectedValueIntolerance);
+  createButton.attr(`data-diet`, selectedValueDiet);
+
+  $(".history").append(createButton);
 }
 
 
 // Event listener for click on buttonSearch, it will regenerate a search when clicking on the history buttons.
 $(document).on("click", ".buttonSearch", function (event) {
-  // console.log("Button clicked:", event.target.textContent)
-  getInfo(event.target.textContent)
-  // nutrition(event.target.textContent)
+  // event.target grabing just the data attributes for each button and passing them in the getInfo function to regenerate the search with these parameters.
+  // console.log("Button clicked:", event.target)
+  const ingredientButton = $(event.target).attr(`data-ingredient`)
+  const intoleranceButton = $(event.target).attr(`data-intolerance`)
+  const dietButton = $(event.target).attr(`data-diet`)
+  // console.log(ingredient, intolerance, diet)
+  getInfo(ingredientButton, intoleranceButton, dietButton)
 });
 
 
-// Saving the ingredients seach to local storage.
-function saveToLocalStorage() {
-  localStorage.setItem(`ingredientsSearch`, JSON.stringify(userIngredientsSearch));
+
+// Saving the searches to local storage.
+function saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet) {
+  // Retrieve existing data from local storage
+  const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+
+  storedIngredients.push({
+    ingredient: ingredient,
+    selectedValueIntolerance: selectedValueIntolerance,
+    selectedValueDiet: selectedValueDiet
+  });
+  localStorage.setItem('ingredientsSearch', JSON.stringify(storedIngredients));
 }
 
 // This function retrives info from local storage, so if the user refreshes the page the previous history buttons persist.
 function loadFromLocalStorage() {
-  const storedIngredients = localStorage.getItem('ingredientsSearch');
-  // console.log("Stored Ingredients:", storedIngredients)
+  const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+
   if (storedIngredients) {
-    userIngredientsSearch = JSON.parse(storedIngredients);
-    // console.log("Loaded Ingredients:", userIngredientsSearch)
+    userIngredientsSearch = storedIngredients;
     for (let i = 0; i < userIngredientsSearch.length; i++) {
-      renderButton(userIngredientsSearch[i]);
+      const { ingredient, selectedValueIntolerance, selectedValueDiet } = userIngredientsSearch[i];
+      renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
     }
   }
 }
 loadFromLocalStorage();
+
 
 function recipesCards(data) {
   $(`.food-options`).empty()
@@ -167,26 +197,23 @@ function recipesCards(data) {
     dietsDiv.append(dietsTitle, ($(`<p>`).text(dietsString)))
 
     const ingredientsDiv = $(`<div class = ingredientsInfo>`)
-    const ingredientsTitle = $(`<h6>`).text(`Ingredients:`)
+    const ingredientsTitle = $(`<h6>`).text(`Ingredients and Calories:`)
     const ingredientsList = $(`<ul>`)
 
-    // let ingredientsString = "";
     for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
       const ingredientName = data.results[i].extendedIngredients[k].original;
       const capitalizedIngredient = ingredientName.charAt(0).toUpperCase() + ingredientName.slice(1).toLowerCase();
       const listItemIngredient = $(`<li>`).text(capitalizedIngredient);
       ingredientsList.append(listItemIngredient);
-      // ingredientsString += capitalizedIngredient + `, `
-     nutrition(ingredientName, capitalizedIngredient, listItemIngredient)
+      nutrition(ingredientName, capitalizedIngredient, listItemIngredient)
     }
-    // ingredientsString = ingredientsString.slice(0, -2);
     ingredientsDiv.append(ingredientsTitle, ingredientsList);
 
     const linkDiv = $(`<div class = externalLink>`);
     // Added target="_blank" to open the link in a new tab.
     const recipeLink = $(`<a href=${data.results[i].sourceUrl} class=btn id=btnRecipe target="_blank">Go to Recipe</a>`);
     linkDiv.append(recipeLink);
-   
+
     $(`.food-options`).append(divCard);
     divCard.append(divCardBody);
     divCardBody.append(recipeTitle, recipeImg, recipeTime, recipeServingTitle, recipeServing, dietsDiv, ingredientsDiv, linkDiv);
