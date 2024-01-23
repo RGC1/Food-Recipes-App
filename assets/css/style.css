@@ -44,15 +44,6 @@ p{
   display: flex;
 }
 
-/*
-.background-image{
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  height: 100vh;
-}
-*/
-
 .second-page{
   background-color: #dbe0b9;
 
@@ -67,7 +58,7 @@ p{
   font-weight: 500 !important;
 }
 
-.history{
+/*.history{
 
 }
 
@@ -78,17 +69,18 @@ p{
 .card{
 
 }
-
+*/
 .card-body{
   border:2px solid green;
   background-color: #f5d57f;
 
 }
 
+/*
 .imgRecipe{
 
 }
-
+*/
 
 footer {
   position: absolute;
