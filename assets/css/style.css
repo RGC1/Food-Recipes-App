@@ -13,8 +13,9 @@ body {
 .first-page{
   height: 100vh;
   background-image:url('../images/Design1.jpeg');
-  background-position: 0 0 100%;
-  background-size: auto, cover;
+  background-repeat: no-repeat;
+  background-position: cover;
+  background-size: cover;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -72,6 +73,7 @@ p{
 
 }
 */
+
 .card-body{
   border:2px solid green;
   background-color: #f5d57f;
