@@ -1,4 +1,4 @@
-// Empty array of previous searches, needed for buttons and localstorage
+// Empty array of previous searches, needed for localstorage
 let userIngredientsSearch = [];
 
 function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
@@ -14,11 +14,17 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
       return response.json();
     })
     .then(function (data) {
+      console.log(data)
       // The if statement checks if the user already searched an ingredient with the same name (in the userIngredientSearch array) if not it will push the new ingredient to the array and generate a new button and save it to local storage.
-      if (!userIngredientsSearch.includes(ingredient)) {
-        userIngredientsSearch.push(ingredient);
-        renderButton(ingredient);
-        saveToLocalStorage();
+      const recipeList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+      const existingRecipeList = recipeList.findIndex(function (item) {
+        return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance
+      });
+
+      if (existingRecipeList === -1) {
+        // userIngredientsSearch.push(ingredient);
+        renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
+        saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet);
       }
       // Calling the function to generate recipes cards.
       recipesCards(data);
@@ -40,8 +46,8 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
   // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
   // const apiIdNutrition = 'c3a22b69';
 
-  const apiKeyNutrition = 'b4aa5d362758efabc2eca7ebeec76e28';
-  const apiIdNutrition = 'acf79b7b';
+  const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
+  const apiIdNutrition = 'c3a22b69';
 
   // const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
   // const apiIdNutrition = '3b7c2557';
@@ -53,11 +59,12 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
       return response.json();
     })
     .then(function (dataNutrition) {
-      const nutrition = dataNutrition.calories 
+      const nutrition = dataNutrition.calories
 
       listItemIngredient.text(capitalizedIngredient + ": " + nutrition + "Kcal");
-      
-    })}
+
+    })
+}
 
 
 function userInput() {
@@ -72,12 +79,11 @@ function userInput() {
     }
     const capitalizedUserInputIngredients = capitalizeWords(userInputIngredients);
 
-    const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
     const selectedValueIntolerance = $('.btn-group.intolerance-dropdown .dropdown-item.active').text();
-
+    const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
+    // console.log(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet)
     getInfo(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet);
-  
-    
+
     // Clear active state of dropdown items
     $('.btn-group.intolerance-dropdown .dropdown-item').removeClass('active');
     $('.btn-group.diet-dropdown .dropdown-item').removeClass('active');
@@ -85,7 +91,7 @@ function userInput() {
     // Clearing the search input field from previous search.
     $("#userData").val("");
   });
-  
+
   // Event listener for click on dropdown items (intolerance)
   $('.btn-group.intolerance-dropdown').on('click', '.dropdown-item', function () {
     // Toggle active class for styling if needed
@@ -111,38 +117,77 @@ function capitalizeWords(inputString) {
 }
 
 // This function creates buttons for each user search and it appends them to the aside section.
-function renderButton(capitalizedUserInputIngredients) {
-  const createButton = $("<button class = buttonSearch>").text(`${capitalizedUserInputIngredients}`);
-  $(`.history`).append(createButton);
+function renderButton(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet) {
+  const createButton = $("<button class='buttonSearch'>")
+    .text(`${capitalizedUserInputIngredients} - Intolerance: ${selectedValueIntolerance || 'None'} - Diet: ${selectedValueDiet || 'None'}`);
+
+  // Creating data attribute for each buttons
+  createButton.attr(`data-ingredient`, capitalizedUserInputIngredients);
+  createButton.attr(`data-intolerance`, selectedValueIntolerance);
+  createButton.attr(`data-diet`, selectedValueDiet);
+
+  $(".history").append(createButton);
 }
 
 
 // Event listener for click on buttonSearch, it will regenerate a search when clicking on the history buttons.
 $(document).on("click", ".buttonSearch", function (event) {
-  // console.log("Button clicked:", event.target.textContent)
-  getInfo(event.target.textContent)
-  // nutrition(event.target.textContent)
+  // event.target grabing just the data attributes for each button and passing them in the getInfo function to regenerate the search with these parameters.
+  // console.log("Button clicked:", event.target)
+  const ingredientButton = $(event.target).attr(`data-ingredient`)
+  const intoleranceButton = $(event.target).attr(`data-intolerance`)
+  const dietButton = $(event.target).attr(`data-diet`)
+  // console.log(ingredient, intolerance, diet)
+  getInfo(ingredientButton, intoleranceButton, dietButton)
 });
 
 
+
 // Saving the ingredients seach to local storage.
-function saveToLocalStorage() {
-  localStorage.setItem(`ingredientsSearch`, JSON.stringify(userIngredientsSearch));
+function saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet) {
+  // Retrieve existing data from local storage
+  const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+
+  // Check if the ingredient is already stored
+  // const existingIngredientIndex = storedIngredients.findIndex(function (item) {
+  //   return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance
+  // });
+
+  // console.log(existingIngredientIndex)
+  // If the ingredient is already stored, update its values
+  // Otherwise, add a new entry for the ingredient
+  // if (existingIngredientIndex !== -1) {
+  //   storedIngredients[existingIngredientIndex].selectedValueIntolerance = selectedValueIntolerance;
+  //   storedIngredients[existingIngredientIndex].selectedValueDiet = selectedValueDiet;
+  // } else {
+  storedIngredients.push({
+    ingredient: ingredient,
+    selectedValueIntolerance: selectedValueIntolerance,
+    selectedValueDiet: selectedValueDiet
+  });
+  // }
+  // Save the updated data back to local storage
+  localStorage.setItem('ingredientsSearch', JSON.stringify(storedIngredients));
 }
 
 // This function retrives info from local storage, so if the user refreshes the page the previous history buttons persist.
 function loadFromLocalStorage() {
-  const storedIngredients = localStorage.getItem('ingredientsSearch');
+  const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
   // console.log("Stored Ingredients:", storedIngredients)
+  // console.log(`1: ${storedIngredients}`)
   if (storedIngredients) {
-    userIngredientsSearch = JSON.parse(storedIngredients);
+    userIngredientsSearch = storedIngredients;
     // console.log("Loaded Ingredients:", userIngredientsSearch)
+    // console.log(`1: ${userIngredientsSearch[0]}`)
     for (let i = 0; i < userIngredientsSearch.length; i++) {
-      renderButton(userIngredientsSearch[i]);
+      // console.log(`1: ${userIngredientsSearch[i]}`)
+      const { ingredient, selectedValueIntolerance, selectedValueDiet } = userIngredientsSearch[i];
+      renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
     }
   }
 }
 loadFromLocalStorage();
+
 
 function recipesCards(data) {
   $(`.food-options`).empty()
@@ -170,23 +215,20 @@ function recipesCards(data) {
     const ingredientsTitle = $(`<h6>`).text(`Ingredients:`)
     const ingredientsList = $(`<ul>`)
 
-    // let ingredientsString = "";
     for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
       const ingredientName = data.results[i].extendedIngredients[k].original;
       const capitalizedIngredient = ingredientName.charAt(0).toUpperCase() + ingredientName.slice(1).toLowerCase();
       const listItemIngredient = $(`<li>`).text(capitalizedIngredient);
       ingredientsList.append(listItemIngredient);
-      // ingredientsString += capitalizedIngredient + `, `
-     nutrition(ingredientName, capitalizedIngredient, listItemIngredient)
+      nutrition(ingredientName, capitalizedIngredient, listItemIngredient)
     }
-    // ingredientsString = ingredientsString.slice(0, -2);
     ingredientsDiv.append(ingredientsTitle, ingredientsList);
 
     const linkDiv = $(`<div class = externalLink>`);
     // Added target="_blank" to open the link in a new tab.
     const recipeLink = $(`<a href=${data.results[i].sourceUrl} class=btn id=btnRecipe target="_blank">Go to Recipe</a>`);
     linkDiv.append(recipeLink);
-   
+
     $(`.food-options`).append(divCard);
     divCard.append(divCardBody);
     divCardBody.append(recipeTitle, recipeImg, recipeTime, recipeServingTitle, recipeServing, dietsDiv, ingredientsDiv, linkDiv);
