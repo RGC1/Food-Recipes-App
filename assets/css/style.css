@@ -51,12 +51,37 @@ p{
 
 }
 
+/*buttons that appear under Search History section*/
+.buttonSearch{
+  border: 2px solid green;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  padding: 10px 10px;
+  font-weight: 500;
+  color: #104f11;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-right: 20px; 
+}
+
+.btn-group{
+  border-radius: 20px;
+  padding: 10px 10px;
+  font-weight: 500;
+  color: #104f11;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px; 
+}
+
+
 .readyInMinutes {
   font-weight: 600;
 }
 
 #btnRecipe {
-  background-color: #FFC107 !important;
+  background-color: #866910 !important;
   font-weight: 500 !important;
 }
 
