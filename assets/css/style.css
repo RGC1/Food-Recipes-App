@@ -13,11 +13,13 @@ body {
 .first-page{
   height: 100vh;
   background-image:url('../images/Design1.jpeg');
-  background-position: 0 0 100%;
-  background-size: auto, cover;
+  background-repeat: no-repeat;
+  background-position: cover;
+  background-size: cover;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   display: flex;
 }
 
@@ -49,12 +51,37 @@ p{
 
 }
 
+/*buttons that appear under Search History section*/
+.buttonSearch{
+  border: 2px solid green;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  padding: 10px 10px;
+  font-weight: 500;
+  color: #104f11;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-right: 20px; 
+}
+
+.btn-group{
+  border-radius: 20px;
+  padding: 10px 10px;
+  font-weight: 500;
+  color: #104f11;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px; 
+}
+
+
 .readyInMinutes {
   font-weight: 600;
 }
 
 #btnRecipe {
-  background-color: #FFC107 !important;
+  background-color: #866910 !important;
   font-weight: 500 !important;
 }
 
@@ -71,17 +98,19 @@ p{
 
 }
 */
+
 .card-body{
   border:2px solid green;
   background-color: #f5d57f;
 
 }
 
-/*
-.imgRecipe{
 
+.imgRecipe{
+  max-width: 100%;
+  height: auto;
 }
-*/
+
 
 footer {
   position: absolute;
@@ -95,3 +124,15 @@ footer {
   font-size: 1rem;
 }
 
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 5rem;
+  }
+  p {
+    font-size: 1.5rem;
+  }
+  .btn-main {
+    padding: 5px 5px;
+  }
+}
