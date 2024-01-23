@@ -14,7 +14,6 @@ let userIngredientsSearch = [];
     })
     .then(function (data) {
       if (data.results && data.results.length > 0) {
-        // The API returned results for the specified ingredient
 
         const recipesList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
         const existingRecipesList = recipesList.findIndex(function (item) {
