@@ -14,18 +14,20 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data)
-      // The if statement checks if the user already searched an ingredient with the same name (in the userIngredientSearch array) if not it will push the new ingredient to the array and generate a new button and save it to local storage.
-      const recipeList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
-      const existingRecipeList = recipeList.findIndex(function (item) {
+      // console.log(data)
+
+      // Retriving the stored `ingredientSearch` from localStorage, thanks to `findIndex method` checks if in the recipesList array there is an item which matches the specified conditions and if so returns the index of the first element in the array that satisfies the provided testing function. If no element satisfies the condition, it returns -1.
+      const recipesList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+      const existingRecipesList = recipesList.findIndex(function (item) {
         return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance
       });
-
-      if (existingRecipeList === -1) {
-        // userIngredientsSearch.push(ingredient);
+      
+      // If the existingRecipesList returned -1, so no object is stored with the same parameters, it will render a new button and it will save the new search to localStorage.
+      if (existingRecipesList === -1) {
         renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
         saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet);
       }
+
       // Calling the function to generate recipes cards.
       recipesCards(data);
 
@@ -62,7 +64,6 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
       const nutrition = dataNutrition.calories
 
       listItemIngredient.text(capitalizedIngredient + ": " + nutrition + "Kcal");
-
     })
 }
 
@@ -72,7 +73,7 @@ function userInput() {
     e.preventDefault();
 
     let userInputIngredients = $("#userData").val().trim();
-    // console.log('test')
+    
     // If the user inputs any ingredient with capital letter the method will tranform every letter to lowercase.
     if (/[A-Z]/.test(userInputIngredients)) {
       userInputIngredients = userInputIngredients.toLowerCase();
@@ -81,7 +82,7 @@ function userInput() {
 
     const selectedValueIntolerance = $('.btn-group.intolerance-dropdown .dropdown-item.active').text();
     const selectedValueDiet = $('.btn-group.diet-dropdown .dropdown-item.active').text();
-    // console.log(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet)
+
     getInfo(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet);
 
     // Clear active state of dropdown items
@@ -98,7 +99,6 @@ function userInput() {
     $('.btn-group.intolerance-dropdown .dropdown-item');
     $(this).addClass('active');
   });
-
   // Event listener for click on dropdown items (diet)
   $('.btn-group.diet-dropdown').on('click', '.dropdown-item', function () {
     // Toggle active class for styling if needed
@@ -107,7 +107,9 @@ function userInput() {
   });
 }
 
+
 userInput();
+
 
 // This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the userInput function).
 function capitalizeWords(inputString) {
@@ -116,12 +118,13 @@ function capitalizeWords(inputString) {
   });
 }
 
+
 // This function creates buttons for each user search and it appends them to the aside section.
 function renderButton(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet) {
   const createButton = $("<button class='buttonSearch'>")
     .text(`${capitalizedUserInputIngredients} - Intolerance: ${selectedValueIntolerance || 'None'} - Diet: ${selectedValueDiet || 'None'}`);
 
-  // Creating data attribute for each buttons
+  // Creating data attribute for each buttons so we can use them to make a new search when the user click on the buttons.
   createButton.attr(`data-ingredient`, capitalizedUserInputIngredients);
   createButton.attr(`data-intolerance`, selectedValueIntolerance);
   createButton.attr(`data-diet`, selectedValueDiet);
@@ -143,44 +146,26 @@ $(document).on("click", ".buttonSearch", function (event) {
 
 
 
-// Saving the ingredients seach to local storage.
+// Saving the searches to local storage.
 function saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet) {
   // Retrieve existing data from local storage
   const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
-
-  // Check if the ingredient is already stored
-  // const existingIngredientIndex = storedIngredients.findIndex(function (item) {
-  //   return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance
-  // });
-
-  // console.log(existingIngredientIndex)
-  // If the ingredient is already stored, update its values
-  // Otherwise, add a new entry for the ingredient
-  // if (existingIngredientIndex !== -1) {
-  //   storedIngredients[existingIngredientIndex].selectedValueIntolerance = selectedValueIntolerance;
-  //   storedIngredients[existingIngredientIndex].selectedValueDiet = selectedValueDiet;
-  // } else {
+  
   storedIngredients.push({
     ingredient: ingredient,
     selectedValueIntolerance: selectedValueIntolerance,
     selectedValueDiet: selectedValueDiet
   });
-  // }
-  // Save the updated data back to local storage
   localStorage.setItem('ingredientsSearch', JSON.stringify(storedIngredients));
 }
 
 // This function retrives info from local storage, so if the user refreshes the page the previous history buttons persist.
 function loadFromLocalStorage() {
   const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
-  // console.log("Stored Ingredients:", storedIngredients)
-  // console.log(`1: ${storedIngredients}`)
+
   if (storedIngredients) {
     userIngredientsSearch = storedIngredients;
-    // console.log("Loaded Ingredients:", userIngredientsSearch)
-    // console.log(`1: ${userIngredientsSearch[0]}`)
     for (let i = 0; i < userIngredientsSearch.length; i++) {
-      // console.log(`1: ${userIngredientsSearch[i]}`)
       const { ingredient, selectedValueIntolerance, selectedValueDiet } = userIngredientsSearch[i];
       renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
     }
