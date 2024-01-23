@@ -5,8 +5,8 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
   //APi for the food search conform the ingredients 
   // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  const apiKeySearch = 'e74daa4c1fba4dea89c7a0c637bd6d4d'
+  // const apiKeySearch = "e74daa4c1fba4dea89c7a0c637bd6d4d";
+  const apiKeySearch = '20fa1c17de69490f93632c908260c7bb'
   const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
 
   fetch(queryUrlSearch)
@@ -150,7 +150,7 @@ $(document).on("click", ".buttonSearch", function (event) {
 function saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet) {
   // Retrieve existing data from local storage
   const storedIngredients = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
-  
+
   storedIngredients.push({
     ingredient: ingredient,
     selectedValueIntolerance: selectedValueIntolerance,
@@ -197,7 +197,7 @@ function recipesCards(data) {
     dietsDiv.append(dietsTitle, ($(`<p>`).text(dietsString)))
 
     const ingredientsDiv = $(`<div class = ingredientsInfo>`)
-    const ingredientsTitle = $(`<h6>`).text(`Ingredients:`)
+    const ingredientsTitle = $(`<h6>`).text(`Ingredients and Calories:`)
     const ingredientsList = $(`<ul>`)
 
     for (let k = 0; k < data.results[i].extendedIngredients.length; k++) {
