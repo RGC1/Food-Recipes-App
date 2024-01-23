@@ -63,7 +63,7 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
     .then(function (dataNutrition) {
       const nutrition = dataNutrition.calories
 
-      listItemIngredient.text(capitalizedIngredient + " - " + nutrition + "Kcal");
+      listItemIngredient.text(capitalizedIngredient + " - " + nutrition + " Kcal");
     })
 }
 
