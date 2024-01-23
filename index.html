@@ -13,9 +13,20 @@
 
 <body>
 
-  <header class="container-fluid text-center text-black bg-blue p-2 foodrecipes-header">
-    <h1> Food Recipes App </h1>
-  </header>
+  <section class="first-page">
+    <div class="maintext">
+      <h1>FOODIE</h1>
+      <p> Discover and enjoy healthy recipes</p>
+      <a href="#search-button" class="btn-main" > Explore!</a>
+    </div>
+  
+  </section>
+
+  <section class="second-page">
+
+  <div class="container-fluid text-center text-black bg-blue p-2 foodrecipes-header">
+    <h2> Foodie - Healthy Recipes App </h2>
+  </div>
 
   <section class="btn d-grid gap-2 d-md">
     <form id="search-form" class="form">
@@ -60,20 +71,25 @@
 
   <section class="container-fluid">
     <div class="row">
-      <aside class="col-lg-4 pb-3 history">
-        <h2> Results: </h2>
+      <aside class="col-lg-3 pb-3 history">
+        <h3> Results: </h3>
       </aside>
 
-      <section class="col-lg-8 pb-2 food-options">
+      <section class="col-lg-9 pb-2">
+        <div class="row row-cols-1 row-cols-md-2 g-4 food-options"></div>
       </section>
     </div>
   </section>
 
+</section>
 
-
+  <!-- Footer -->
   <footer>
-
+    <div class="container">
+      <p class="footer-text">&copy; FoodieApp 2024. All Rights Reserved.</p>
+    </div>
   </footer>
+  <!-- End footer -->
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
