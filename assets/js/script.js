@@ -1,40 +1,60 @@
 // Empty array of previous searches, needed for localstorage
 let userIngredientsSearch = [];
-
-function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
-  //APi for the food search conform the ingredients 
-  // const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
-  // const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
-  // const apiKeySearch = "e74daa4c1fba4dea89c7a0c637bd6d4d";
-  const apiKeySearch = '20fa1c17de69490f93632c908260c7bb'
-  const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`
+ 
+ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
+  //  const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
+  //  const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
+  //  const apiKeySearch = "e74daa4c1fba4dea89c7a0c637bd6d4d";
+   const apiKeySearch = '129bd2c702ab43ebbdcd90c506ff5b5c'
+  const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`;
 
   fetch(queryUrlSearch)
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      // console.log(data)
+      if (data.results && data.results.length > 0) {
 
-      // Retriving the stored `ingredientSearch` from localStorage, thanks to `findIndex method` checks if in the recipesList array there is an item which matches the specified conditions and if so returns the index of the first element in the array that satisfies the provided testing function. If no element satisfies the condition, it returns -1.
-      const recipesList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
-      const existingRecipesList = recipesList.findIndex(function (item) {
-        return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance
-      });
-      
-      // If the existingRecipesList returned -1, so no object is stored with the same parameters, it will render a new button and it will save the new search to localStorage.
-      if (existingRecipesList === -1) {
-        renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
-        saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet);
+        const recipesList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
+        const existingRecipesList = recipesList.findIndex(function (item) {
+          return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance;
+        });
+
+        if (existingRecipesList === -1) {
+          renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
+          saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet);
+        }
+
+        // Calling the function to generate recipes cards.
+        recipesCards(data);
+      } else {
+        // The API did not return results for the specified ingredient
+        const alert = $('<p>');
+        const message = 'Ingredient not found. Please enter a valid ingredient.';
+        alert.append(message);
+        $("#search-form").prepend(alert);
+
+        alert.css({
+          color: 'red',
+          fontSize: '20px',
+        });
+
+        setTimeout(function () {
+          if (alert) {
+            alert.remove();
+          }
+        }, 3000);
       }
-
-      // Calling the function to generate recipes cards.
-      recipesCards(data);
 
       // Empty the #userData-input box after each search.
       $(`#userData-input`).val(``);
+    })
+    .catch(function (error) {
+      // Handle errors from the fetch or JSON parsing
+      console.error('Error:', error);
     });
 }
+
 
 
 //API for the food Nutrition
@@ -45,11 +65,11 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
     return;
   }
 
-  // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
-  // const apiIdNutrition = 'c3a22b69';
-
   const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
   const apiIdNutrition = 'c3a22b69';
+
+  // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
+  // const apiIdNutrition = 'c3a22b69';
 
   // const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
   // const apiIdNutrition = '3b7c2557';
@@ -107,9 +127,7 @@ function userInput() {
   });
 }
 
-
 userInput();
-
 
 // This function capitalize any string parameter will be passed in. It makes sure that each input ingredient from the user will be capitalized and then used for the name of the buttons (this is happening in the userInput function).
 function capitalizeWords(inputString) {
@@ -118,9 +136,9 @@ function capitalizeWords(inputString) {
   });
 }
 
-
 // This function creates buttons for each user search and it appends them to the aside section.
 function renderButton(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet) {
+ 
   const createButton = $("<button class='buttonSearch'>")
     .text(`${capitalizedUserInputIngredients} - Intolerance: ${selectedValueIntolerance || 'None'} - Diet: ${selectedValueDiet || 'None'}`);
 
@@ -128,8 +146,9 @@ function renderButton(capitalizedUserInputIngredients, selectedValueIntolerance,
   createButton.attr(`data-ingredient`, capitalizedUserInputIngredients);
   createButton.attr(`data-intolerance`, selectedValueIntolerance);
   createButton.attr(`data-diet`, selectedValueDiet);
+  
+  $(".history").append( createButton);
 
-  $(".history").append(createButton);
 }
 
 
@@ -143,7 +162,6 @@ $(document).on("click", ".buttonSearch", function (event) {
   // console.log(ingredient, intolerance, diet)
   getInfo(ingredientButton, intoleranceButton, dietButton)
 });
-
 
 
 // Saving the searches to local storage.
