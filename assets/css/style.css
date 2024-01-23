@@ -18,6 +18,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   display: flex;
 }
 
@@ -77,11 +78,12 @@ p{
 
 }
 
-/*
-.imgRecipe{
 
+.imgRecipe{
+  max-width: 100%;
+  height: auto;
 }
-*/
+
 
 footer {
   position: absolute;
@@ -95,3 +97,15 @@ footer {
   font-size: 1rem;
 }
 
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 5rem;
+  }
+  p {
+    font-size: 1.5rem;
+  }
+  .btn-main {
+    padding: 5px 5px;
+  }
+}
