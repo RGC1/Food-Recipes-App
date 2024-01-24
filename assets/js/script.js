@@ -65,8 +65,8 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
     return;
   }
 
-  const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
-  const apiIdNutrition = 'c3a22b69';
+  const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
+  const apiIdNutrition = '3b7c2557';
 
   // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
   // const apiIdNutrition = 'c3a22b69';
