@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  
 }
 
 html,
@@ -8,6 +9,7 @@ body {
   height: 100%;
   margin: 0;
   font-family: Georgia, 'Times New Roman', Times, serif;
+  
 }
 
 .first-page{
@@ -118,7 +120,7 @@ footer {
   height: 60px;
   line-height: 60px;
   background-color: #f5f5f5;
-  margin-top: 50px;
+
 }
 .footer-text{
   font-size: 1rem;
