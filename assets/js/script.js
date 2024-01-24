@@ -1,11 +1,11 @@
 // Empty array of previous searches, needed for localstorage
 let userIngredientsSearch = [];
- 
- function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
+
+function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
   //  const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   //  const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
   //  const apiKeySearch = "e74daa4c1fba4dea89c7a0c637bd6d4d";
-   const apiKeySearch = '129bd2c702ab43ebbdcd90c506ff5b5c'
+  const apiKeySearch = 'e74daa4c1fba4dea89c7a0c637bd6d4d'
   const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`;
 
   fetch(queryUrlSearch)
@@ -138,7 +138,7 @@ function capitalizeWords(inputString) {
 
 // This function creates buttons for each user search and it appends them to the aside section.
 function renderButton(capitalizedUserInputIngredients, selectedValueIntolerance, selectedValueDiet) {
- 
+
   const createButton = $("<button class='buttonSearch'>")
     .text(`${capitalizedUserInputIngredients} - Intolerance: ${selectedValueIntolerance || 'None'} - Diet: ${selectedValueDiet || 'None'}`);
 
