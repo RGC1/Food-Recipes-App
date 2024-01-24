@@ -130,7 +130,7 @@ h6{
   border:2px solid green;
   background-color: #fef4d9;
   padding: 15px;
-
+  box-shadow: 7px 8px 14px rgb(3, 43, 3);
 }
 
 .imgRecipe{
