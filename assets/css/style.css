@@ -29,7 +29,7 @@ h1{
   text-align: center;
 }
 
-p{
+.p1{
   font-size: 3rem;
   text-align: center;
 }
@@ -77,14 +77,36 @@ p{
 
 
 .readyInMinutes {
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: normal;
+  text-align: left;
+}
+
+.serving{
+  text-align: left;
 }
 
 #btnRecipe {
   background-color: #866910 !important;
   font-weight: 500 !important;
+  border-color: white;
+  color: white;
 }
 
+p{
+  font-size: 1rem;
+  text-align: left;
+}
+
+h5{
+  font-size: 2rem;
+}
+
+h6{
+  font-size: 1.3rem;
+  font-weight: normal;
+  text-decoration: underline;
+}
 
 /*.history{
 
@@ -93,22 +115,28 @@ p{
 .food-options{
   
 }
-
-.card{
-
-}
 */
 
+.card{
+  border:2px solid green;
+  background-color: #f5d57f;
+  padding: 15px;
+
+}
+
+/*
 .card-body{
   border:2px solid green;
   background-color: #f5d57f;
 
 }
-
+*/
 
 .imgRecipe{
   max-width: 100%;
   height: auto;
+  display: block;
+  margin: 20px auto 20px auto; 
 }
 
 
