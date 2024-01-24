@@ -37,6 +37,7 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
         alert.css({
           color: 'red',
           fontSize: '20px',
+          textAlign: 'center',
         });
 
         setTimeout(function () {
