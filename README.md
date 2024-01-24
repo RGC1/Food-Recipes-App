@@ -11,10 +11,14 @@ The code uses two server-side food APIs: Spoonacular https://spoonacular.com/foo
 
 This app runs in the browser and features dynamically updated HTML and CSS powered by JavaScript. 
 
-The code is deployed at https://rgc1.github.io/Food-Recipes-App/
+The code is deployed at https://rgc1.github.io/Foodie-Recipes-App/
 
 ## Screenshots
+![Alt text](assets/images/screencapture-rgc1-github-io-Foodie-Recipes-App-2024-01-24-19_59_37.png)
 
+![Alt text](assets/images/screencapture-rgc1-github-io-Foodie-Recipes-App-2024-01-24-20_00_23.png)
+
+![Alt text](assets/images/screencapture-rgc1-github-io-Foodie-Recipes-App-2024-01-24-20_05_57.png)
 
 ## Installation
 
@@ -39,6 +43,13 @@ Server-side APIs from:
 MIT License
 
 ## Badges
+![Static Badge](https://img.shields.io/badge/21%25%20-%20blue?label=HTML&labelColor=green)
+
+![Static Badge](https://img.shields.io/badge/16%25%20-%20blue?label=CSS&labelColor=yellow)
+
+![Static Badge](https://img.shields.io/badge/63%25%20-%20blue?label=Javascript&labelColor=red)
+
+
 
 
 
