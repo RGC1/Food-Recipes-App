@@ -5,7 +5,7 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
   //  const apiKeySearch = "cee5a04b58e44eb4986476154872470f";
   //  const apiKeySearch = "20fa1c17de69490f93632c908260c7bb";
   //  const apiKeySearch = "e74daa4c1fba4dea89c7a0c637bd6d4d";
-  const apiKeySearch = 'e74daa4c1fba4dea89c7a0c637bd6d4d'
+  const apiKeySearch = '657273ee53ce4433b82a8a1938e43367'
   const queryUrlSearch = `https://api.spoonacular.com/recipes/complexSearch?includeIngredients=${ingredient}&diet=${selectedValueDiet}&intolerances=${selectedValueIntolerance}&addRecipeInformation=true&fillIngredients=true&number=4&apiKey=${apiKeySearch}`;
 
   fetch(queryUrlSearch)
@@ -15,11 +15,13 @@ function getInfo(ingredient, selectedValueIntolerance, selectedValueDiet) {
     .then(function (data) {
       if (data.results && data.results.length > 0) {
 
+         // Retriving the stored `ingredientSearch` from localStorage, thanks to `findIndex method` checks if in the recipesList array there is an item which matches the specified conditions and if so returns the index of the first element in the array that satisfies the provided testing function. If no element satisfies the condition, it returns -1.
         const recipesList = JSON.parse(localStorage.getItem('ingredientsSearch')) || [];
         const existingRecipesList = recipesList.findIndex(function (item) {
           return item.ingredient === ingredient && item.selectedValueDiet === selectedValueDiet && item.selectedValueIntolerance === selectedValueIntolerance;
         });
 
+         // If the existingRecipesList returned -1, so no object is stored with the same parameters, it will render a new button and it will save the new search to localStorage.
         if (existingRecipesList === -1) {
           renderButton(ingredient, selectedValueIntolerance, selectedValueDiet);
           saveToLocalStorage(ingredient, selectedValueIntolerance, selectedValueDiet);
@@ -66,8 +68,8 @@ function nutrition(ingredientName, capitalizedIngredient, listItemIngredient) {
     return;
   }
 
-  const apiKeyNutrition = '3d3be652dc9fb5eed687451afb2224d5';
-  const apiIdNutrition = '3b7c2557';
+  const apiKeyNutrition = '5c3bc03bbba8db7b5b13014b99c8d898';
+  const apiIdNutrition = '594c9b5b';
 
   // const apiKeyNutrition = '8ac12198fbdb382b08155c59b542c40f';
   // const apiIdNutrition = 'c3a22b69';
