@@ -38,6 +38,12 @@ Server-side APIs from:
 - Spoonacular https://spoonacular.com/food-api 
 - Edamam https://www.edamam.com/
 
+
+Excalidraw - for wireframing  https://excalidraw.com/
+
+Microsoft Designer - background image creation - https://designer.microsoft.com/
+
+
 ## License
 
 MIT License
